@@ -14,3 +14,17 @@ in the same folder and version 1.11. Please substitute your folder structure and
 5. Generate docker image (in `flink-docker/dev/flink-1.11-debian`): `docker build -t flink:1.11-SN .`
 6. Run custom Flink docker image: `docker run -it flink:1.11-SN jobmanager`
 
+### Build without running a containerized web server (skip step 3, above)
+
+4. Generate the `Dockerfile` via: `./add-custom.sh -u file:///build-ctx/flink-1.11.tgz -n flink-1.11`.  
+    Note that the URL must begin with `file:////build-ctx/`
+    Next, copy the tgz file into the build context directory created for your custom build: `cp flink-1.11.tgz -n dev/flink-1.11-debian/.`  
+    Proceed with step 5, above.
+
+#### Build with Podman and without running a containerized web server (skip step 3, above)
+
+Podman doesn't complain about `RUN --mount ...` but then triggers permission denied when accessing files in the mounted volume.  Here's the workaround...
+
+4. Generate the `Dockerfile` via: `./add-custom.sh -u file:///build-vol/flink-1.11.tgz -n flink-1.11`.  
+    Next, copy the tgz file into the build dir created for your custom build: `cp flink-1.11.tgz -n dev/flink-1.11-debian/.`  
+5. Generate docker image (in `flink-docker/dev/flink-1.11-debian`): `docker build -v $PWD:/build-vol -t flink:1.11-SN .`    

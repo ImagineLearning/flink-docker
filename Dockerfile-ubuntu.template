@@ -57,8 +57,15 @@ RUN groupadd --system --gid=9999 flink && \
 WORKDIR $FLINK_HOME
 
 # Install Flink
-RUN set -ex; \
-  wget -nv -O flink.tgz "$FLINK_TGZ_URL"; \
+RUN --mount=type=bind,source=.,target=/build-ctx set -ex; \
+  case $FLINK_TGZ_URL in \
+    file://*) \
+      cp $(echo $FLINK_TGZ_URL | cut -c8-) flink.tgz; \
+      ;; \
+    *) \
+      wget -nv -O flink.tgz "$FLINK_TGZ_URL"; \
+      ;; \
+  esac; \
   \
   if [ "$CHECK_GPG" = "true" ]; then \
     wget -nv -O flink.tgz.asc "$FLINK_ASC_URL"; \
