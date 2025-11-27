@@ -14,3 +14,12 @@ in the same folder and version 1.11. Please substitute your folder structure and
 5. Generate docker image (in `flink-docker/dev/flink-1.11-debian`): `docker build -t flink:1.11-SN .`
 6. Run custom Flink docker image: `docker run -it flink:1.11-SN jobmanager`
 
+### Build without running a containerized web server (skip step 3, above)
+
+4. `./add-custom.sh -l -u flink-1.11.tgz -n flink-1.11`  
+  The important changes from above in this step are to include the `-l` option (local TGZ file), and using a plain file as the argument for `-u`  
+  4.a Copy the TGZ file into the Docker context dir (dev/flink-1.11) and make sure the copied filename in the context dir has the same name
+      as given in the `-u` argument.
+
+Proceed with step 5, above.
+  
