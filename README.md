@@ -16,15 +16,10 @@ in the same folder and version 1.11. Please substitute your folder structure and
 
 ### Build without running a containerized web server (skip step 3, above)
 
-4. Generate the `Dockerfile` via: `./add-custom.sh -u file:///build-ctx/flink-1.11.tgz -n flink-1.11`.  
-    Note that the URL must begin with `file:////build-ctx/`
-    Next, copy the tgz file into the build context directory created for your custom build: `cp flink-1.11.tgz -n dev/flink-1.11-debian/.`  
-    Proceed with step 5, above.
+4. `./add-custom.sh -l -u flink-1.11.tgz -n flink-1.11`  
+  The important changes from above in this step are to include the `-l` option (local TGZ file), and using a plain file as the argument for `-u`  
+  4.a Copy the TGZ file into the Docker context dir (dev/flink-1.11) and make sure the copied filename in the context dir has the same name
+      as given in the `-u` argument.
 
-#### Build with Podman and without running a containerized web server (skip step 3, above)
-
-Podman doesn't complain about `RUN --mount ...` but then triggers permission denied when accessing files in the mounted volume.  Here's the workaround...
-
-4. Generate the `Dockerfile` via: `./add-custom.sh -u file:///build-vol/flink-1.11.tgz -n flink-1.11`.  
-    Next, copy the tgz file into the build dir created for your custom build: `cp flink-1.11.tgz -n dev/flink-1.11-debian/.`  
-5. Generate docker image (in `flink-docker/dev/flink-1.11-debian`): `docker build -v $PWD:/build-vol -t flink:1.11-SN .`    
+Proceed with step 5, above.
+  

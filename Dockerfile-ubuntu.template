@@ -57,14 +57,15 @@ RUN groupadd --system --gid=9999 flink && \
 WORKDIR $FLINK_HOME
 
 # Install Flink
-RUN --mount=type=bind,source=.,target=/build-ctx set -ex; \
-  case $FLINK_TGZ_URL in \
-    file://*) \
-      cp $(echo $FLINK_TGZ_URL | cut -c8-) flink.tgz; \
-      ;; \
-    *) \
+%%COPY_LOCAL_TGZ%%
+RUN set -ex; \
+  case "$FLINK_TGZ_URL" in \
+    http*) \
       wget -nv -O flink.tgz "$FLINK_TGZ_URL"; \
       ;; \
+    *) \
+     # Use the locally copied TGZ file \
+     ;; \
   esac; \
   \
   if [ "$CHECK_GPG" = "true" ]; then \

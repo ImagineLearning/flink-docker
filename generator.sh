@@ -14,6 +14,7 @@ function generateDockerfile {
     check_gpg=$5
     java_version=$6
     source_variant=$7
+    copy_local_tgz=$8
 
     from_docker_image="eclipse-temurin:${java_version}-jre-jammy"
 
@@ -29,6 +30,7 @@ function generateDockerfile {
         -e "s/%%GPG_KEY%%/$gpg_key/" \
         -e "s/%%CHECK_GPG%%/${check_gpg}/" \
         -e "s/%%FROM_IMAGE%%/${from_docker_image}/" \
+        -e "s!%%COPY_LOCAL_TGZ%%!${copy_local_tgz}!" \
         "Dockerfile-$source_variant.template" > "$dir/Dockerfile"
 }
 
